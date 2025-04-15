@@ -1,0 +1,104 @@
+object SeaCommentForm: TSeaCommentForm
+  Left = 0
+  Top = 0
+  Caption = 'SeaCommentForm'
+  ClientHeight = 227
+  ClientWidth = 623
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 16
+    Top = 8
+    Width = 45
+    Height = 13
+    Caption = 'Comment'
+  end
+  object Label2: TLabel
+    Left = 16
+    Top = 144
+    Width = 72
+    Height = 13
+    Caption = 'ROV Depth (m)'
+  end
+  object Memo_TextMetka: TMemo
+    Left = 16
+    Top = 23
+    Width = 569
+    Height = 105
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Edit_Depth: TEdit
+    Left = 16
+    Top = 168
+    Width = 116
+    Height = 41
+    Alignment = taRightJustify
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object OKButton: TButton
+    Left = 475
+    Top = 144
+    Width = 110
+    Height = 65
+    Caption = 'OK'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = OKButtonClick
+  end
+  object CancelButton: TButton
+    Left = 168
+    Top = 144
+    Width = 113
+    Height = 65
+    Caption = 'Cancel'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    OnClick = CancelButtonClick
+  end
+  object ButtonKbrd: TButton
+    Left = 323
+    Top = 144
+    Width = 110
+    Height = 65
+    Caption = 'Kbrd'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    OnClick = ButtonKbrdClick
+  end
+end

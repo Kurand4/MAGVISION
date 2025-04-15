@@ -1,0 +1,44 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+#include <tchar.h>
+//---------------------------------------------------------------------------
+USEFORM("FragmentUnit.cpp", FragmentForm);
+USEFORM("SUnit.cpp", SForm);
+USEFORM("PauseUnit.cpp", PauseForm);
+USEFORM("TrackUnit.cpp", TrackForm);
+USEFORM("MainUnit.cpp", MainForm);
+USEFORM("CommentUnit.cpp", CommentForm);
+//---------------------------------------------------------------------------
+WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
+{
+	try
+	{
+		Application->Initialize();
+		Application->MainFormOnTaskBar = true;
+		Application->CreateForm(__classid(TMainForm), &MainForm);
+		Application->CreateForm(__classid(TCommentForm), &CommentForm);
+		Application->CreateForm(__classid(TSForm), &SForm);
+		Application->CreateForm(__classid(TTrackForm), &TrackForm);
+		Application->CreateForm(__classid(TPauseForm), &PauseForm);
+		Application->Run();
+	}
+	catch (Exception &exception)
+	{
+		Application->ShowException(&exception);
+	}
+	catch (...)
+	{
+		try
+		{
+			throw Exception("");
+		}
+		catch (Exception &exception)
+		{
+			Application->ShowException(&exception);
+		}
+	}
+	return 0;
+}
+//---------------------------------------------------------------------------

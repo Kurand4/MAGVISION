@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2017.09.19 04:54:45.586.cpp,C:\VIZOR\Unit1.cpp=C:\VIZOR\SetUnit.cpp</Transaction>
+    <Transaction>2017.09.19 04:54:45.586.h,C:\VIZOR\Unit1.h=C:\VIZOR\SetUnit.h</Transaction>
+    <Transaction>2017.09.19 04:54:45.586.dfm,C:\VIZOR\Unit1.dfm=C:\VIZOR\SetUnit.dfm</Transaction>
+    <Transaction>2017.09.19 04:56:01.606.cpp,C:\VIZOR\StartWayUnit.cpp=</Transaction>
+    <Transaction>2017.09.19 04:56:01.606.dfm,C:\VIZOR\StartWayUnit.dfm=</Transaction>
+    <Transaction>2017.09.19 04:59:37.405.cpp,C:\VIZOR\SetUnit.cpp=</Transaction>
+    <Transaction>2017.09.19 04:59:37.405.dfm,C:\VIZOR\SetUnit.dfm=</Transaction>
+    <Transaction>2017.09.19 05:03:56.791.cpp,C:\VIZOR\SetUnit.cpp=</Transaction>
+    <Transaction>2017.09.19 05:03:56.791.dfm,C:\VIZOR\SetUnit.dfm=</Transaction>
+    <Transaction>2017.09.19 05:07:57.887.cpp,C:\VIZOR\Unit1.cpp=C:\VIZOR\SUnit.cpp</Transaction>
+    <Transaction>2017.09.19 05:07:57.887.h,C:\VIZOR\Unit1.h=C:\VIZOR\SUnit.h</Transaction>
+    <Transaction>2017.09.19 05:07:57.887.dfm,C:\VIZOR\Unit1.dfm=C:\VIZOR\SUnit.dfm</Transaction>
+    <Transaction>2018.07.30 02:45:10.010.cpp,D:\VIZOR\Unit1.cpp=D:\VIZOR\FragmentUnit.cpp</Transaction>
+    <Transaction>2018.07.30 02:45:10.010.h,D:\VIZOR\Unit1.h=D:\VIZOR\FragmentUnit.h</Transaction>
+    <Transaction>2018.07.30 02:45:10.010.dfm,D:\VIZOR\Unit1.dfm=D:\VIZOR\FragmentUnit.dfm</Transaction>
+    <Transaction>2019.01.03 08:57:18.449.cpp,D:\VIZOR\Unit1.cpp=D:\VIZOR\GPSUnit.cpp</Transaction>
+    <Transaction>2019.01.03 08:57:18.449.h,D:\VIZOR\Unit1.h=D:\VIZOR\GPSUnit.h</Transaction>
+    <Transaction>2019.01.03 08:57:29.559.cpp,D:\VIZOR\Unit2.cpp=D:\VIZOR\KMDUnit.cpp</Transaction>
+    <Transaction>2019.01.03 08:57:29.559.h,D:\VIZOR\Unit2.h=D:\VIZOR\KMDUnit.h</Transaction>
+    <Transaction>2019.06.02 05:00:25.235.cbproj,D:\VIZOR\Vizor.cbproj=D:\MagVision\MagVision.cbproj</Transaction>
+    <Transaction>2019.06.05 04:48:15.882.cpp,D:\MagVision\Unit1.cpp=</Transaction>
+    <Transaction>2019.06.05 04:48:15.882.dfm,D:\MagVision\Unit1.dfm=</Transaction>
+    <Transaction>2019.06.05 04:55:28.377.cpp,D:\MagVision\Unit2.cpp=D:\MagVision\TrackUnit.cpp</Transaction>
+    <Transaction>2019.06.05 04:55:28.377.h,D:\MagVision\Unit2.h=D:\MagVision\TrackUnit.h</Transaction>
+    <Transaction>2019.06.05 04:55:28.377.dfm,D:\MagVision\Unit2.dfm=D:\MagVision\TrackUnit.dfm</Transaction>
+    <Transaction>2019.06.07 23:59:38.085.cpp,D:\MagVision\KMDUnit.cpp=</Transaction>
+    <Transaction>2019.06.08 00:00:02.267.cpp,D:\MagVision\GPSUnit.cpp=</Transaction>
+    <Transaction>2019.06.14 21:35:37.723.cpp,D:\MagVision\Unit3.cpp=</Transaction>
+    <Transaction>2019.06.14 21:35:37.723.dfm,D:\MagVision\Unit3.dfm=</Transaction>
+    <Transaction>2019.06.25 09:10:41.128.cpp,D:\MagVision\Unit2.cpp=</Transaction>
+    <Transaction>2019.06.25 09:10:41.129.dfm,D:\MagVision\Unit2.dfm=</Transaction>
+    <Transaction>2019.06.29 07:56:45.166.cpp,D:\MagVision\Unit2.cpp=</Transaction>
+    <Transaction>2019.06.29 07:56:45.166.dfm,D:\MagVision\Unit2.dfm=</Transaction>
+    <Transaction>2019.06.29 07:58:03.238.cpp,D:\MagVision\FragmentUnit.cpp=</Transaction>
+    <Transaction>2019.06.29 07:58:03.238.dfm,D:\MagVision\FragmentUnit.dfm=</Transaction>
+    <Transaction>2019.08.01 22:14:12.923.cpp,D:\MagVision\Unit4.cpp=D:\MagVision\PauseUnit.cpp</Transaction>
+    <Transaction>2019.08.01 22:14:12.923.h,D:\MagVision\Unit4.h=D:\MagVision\PauseUnit.h</Transaction>
+    <Transaction>2019.08.01 22:14:12.923.dfm,D:\MagVision\Unit4.dfm=D:\MagVision\PauseUnit.dfm</Transaction>
+    <Transaction>2019.08.02 12:27:45.687.cpp,D:\MagVision\Unit4.cpp=D:\MagVision\SeaCommentUnit.cpp</Transaction>
+    <Transaction>2019.08.02 12:27:45.687.h,D:\MagVision\Unit4.h=D:\MagVision\SeaCommentUnit.h</Transaction>
+    <Transaction>2019.08.02 12:27:45.687.dfm,D:\MagVision\Unit4.dfm=D:\MagVision\SeaCommentUnit.dfm</Transaction>
+    <Transaction>2025.03.16 19:52:05.363.cpp,C:\MagVision\SeaCommentUnit.cpp=</Transaction>
+    <Transaction>2025.03.16 19:52:05.363.dfm,C:\MagVision\SeaCommentUnit.dfm=</Transaction>
+  </Transactions>
+</BorlandProject>

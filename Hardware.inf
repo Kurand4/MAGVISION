@@ -1,0 +1,17 @@
+[KMD]
+USBKMDname=COM11
+BthKMDname=COM3
+KMDspeed=115200
+KMDtype =2
+DevNum=1
+[GPS]
+USBGPSname=USBSER
+BthGPSname=COM3
+GPSspeed=9600
+GPStype =2
+[X]
+MAXPOINT=6000
+StartWay=0
+MarkerStep=50
+AUTORESTART=0
+
