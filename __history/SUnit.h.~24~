@@ -1,0 +1,132 @@
+//---------------------------------------------------------------------------
+
+#ifndef SUnitH
+#define SUnitH
+//---------------------------------------------------------------------------
+#include "Registry.hpp"
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <VCLTee.Chart.hpp>
+#include <VCLTee.Series.hpp>
+#include <VclTee.TeeGDIPlus.hpp>
+#include <VCLTee.TeEngine.hpp>
+#include <VCLTee.TeeProcs.hpp>
+#include <Vcl.Dialogs.hpp>
+//---------------------------------------------------------------------------
+class TSForm : public TForm
+{
+__published:	// IDE-managed Components
+	TPanel *Panel1;
+	TPanel *Panel2;
+	TPanel *Panel3;
+	TPanel *Panel4;
+	TPanel *Panel5;
+	TPanel *Panel6;
+	TPanel *Panel7;
+	TLabel *Label1;
+	TButton *AddBluetoothButton;
+	TButton *ParamBluetoothButton;
+	TListBox *COMListBox;
+	TLabel *Label2;
+	TComboBox *CB_StartBox;
+	TLabel *Label5;
+	TComboBox *CB_DevNum;
+	TButton *CloseButton;
+	TRadioGroup *RadioGroup_XAxes;
+	TRadioGroup *RG_MarkerStep;
+	TRadioGroup *RG_AutoRestart;
+	TRadioGroup *RG_PlotType;
+	TGroupBox *GroupBox1;
+	TLabel *Label3;
+	TMemo *KMDMemo;
+	TComboBox *CBox_KMDBth;
+	TButton *KMDBthButton;
+	TGroupBox *GroupBox2;
+	TLabel *Label4;
+	TMemo *Memo1;
+	TComboBox *ComboBox1;
+	TButton *Button1;
+	TTimer *Timer1;
+	TGroupBox *GroupBox3;
+	TLabel *Label6;
+	TMemo *GPSMemo;
+	TComboBox *CBox_GPSBth;
+	TButton *GPSBthButton;
+	TGroupBox *GroupBox7;
+	TButton *ButtonSelectFragment;
+	TCheckBox *CB_FragmSearch;
+	TChart *Chart1;
+	TFastLineSeries *Series1;
+	TFastLineSeries *Series2;
+	TOpenDialog *OpenDialog1;
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall CloseButtonClick(TObject *Sender);
+	void __fastcall RG_AutoRestartClick(TObject *Sender);
+	void __fastcall RadioGroup_XAxesClick(TObject *Sender);
+	void __fastcall KMDBthButtonClick(TObject *Sender);
+	void __fastcall COMListBoxDblClick(TObject *Sender);
+	void __fastcall Timer1Timer(TObject *Sender);
+	void __fastcall RG_MarkerStepClick(TObject *Sender);
+	void __fastcall CB_StartBoxKeyUp(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall RG_PlotTypeClick(TObject *Sender);
+	void __fastcall FormHide(TObject *Sender);
+	void __fastcall ParamBluetoothButtonClick(TObject *Sender);
+	void __fastcall AddBluetoothButtonClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall ButtonSelectFragmentClick(TObject *Sender);
+	void __fastcall CB_DevNumCloseUp(TObject *Sender);
+
+private:	// User declarations
+	AnsiString	BthKMDname, BthGPSname, InfoStr;
+	String  sComPort;
+	struct DT_STRUCT {
+		unsigned short	Metka;              //
+		TTime 	    DT_TIME;
+		float     	DT_DATA[6];      //
+		float      	AV_DATA[6];      //
+		float       Way;
+		float       Spd;
+		float       Depth;
+		double      Lat;
+		double      Lng;
+		bool				StdCommentType[5];    // standard comments: 0 - Izol, 1 - KIP, 2 - cross, 3 - road, 4 - turn
+	} DT;
+	TDCB		lpDCB;
+	HWND	h;
+	FILE * df;
+	char 	  buf[256];
+	DWORD   BytesRead;
+	int			GPSspeed;
+	TRegistry		* Reg;
+	TStringList * List;
+	int		  m_lLastError;
+	int 		MAXPOINT;    // кол. точек по оси х на графиках
+	int 		MarkerStep, StartWay;
+	__int64     AUTORESTART;
+	void 		ClearAllBox();
+	void 		SetMaxPoint();
+	void 		GetInfFile();
+	bool 		__fastcall TestKMD(AnsiString s);
+	void 		__fastcall TestGPS(AnsiString s);
+	void 		SetMarkerStep(int MarkerStep, TRadioGroup *RG);
+	void 		SetAutoRestart();
+public:		// User declarations
+	AnsiString  FragmentName;
+	AnsiString  sDevNum;         // номер прибора
+	HANDLE  GPSport, KMDport;
+	void 		SaveInfFile();
+	bool    KMDBthflag, GPSBthflag;
+	int			fCount;   // number of fragment points
+	double	FrLat, FrLng;
+	int 		iOutputType;           // 0 - V   1 - VA  2 - both
+	__fastcall TSForm(TComponent* Owner);
+	String 	LeadSpace(int k, String s);
+	String 	LeadZero(int k, int dig);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TSForm *SForm;
+//---------------------------------------------------------------------------
+#endif

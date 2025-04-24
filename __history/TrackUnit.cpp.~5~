@@ -1,0 +1,81 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+#include <math.h>
+
+#include "SUnit.h"
+#include "MainUnit.h"
+#include "TrackUnit.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "Chart"
+#pragma link "DBChart"
+#pragma link "Series"
+#pragma link "TeEngine"
+#pragma link "TeeProcs"
+#pragma resource "*.dfm"
+TTrackForm *TrackForm;
+//---------------------------------------------------------------------------
+__fastcall TTrackForm::TTrackForm(TComponent* Owner) 	: TForm(Owner) {    }
+//---------------------------------------------------------------------------
+void __fastcall TTrackForm::CloseButtonClick(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void  TTrackForm::ClearTrack()
+{
+	Series_Track->Clear();
+	FirstPointSeries->Clear();
+	MarkerSeries->Clear();
+	FirstPointSeries->Clear();
+}
+//---------------------------------------------------------------------------
+void TTrackForm::SetIniCoordAxis(double d_long, double d_lat)
+{
+	Chart_Track->LeftAxis->Automatic 		= true;
+	Chart_Track->BottomAxis->Automatic 	= true;
+}
+//---------------------------------------------------------------------------
+void TTrackForm::SetCoordAxis(double d_long, double d_lat)
+{
+	if (fabs(Chart_Track->LeftAxis->Maximum - d_lat) < LATSTEP*0.01)
+		Chart_Track->LeftAxis->Maximum += LATSTEP;
+	if (fabs(Chart_Track->LeftAxis->Minimum - d_lat) < LATSTEP*0.01)
+		Chart_Track->LeftAxis->Minimum -= LATSTEP;
+	if (fabs(Chart_Track->BottomAxis->Maximum - d_long) < LATSTEP*0.01)
+		Chart_Track->BottomAxis->Maximum += LATSTEP*1.5;                    ///LatCoeff;
+	if (fabs(Chart_Track->BottomAxis->Minimum - d_long) < LATSTEP*0.01)
+		Chart_Track->BottomAxis->Minimum -= LATSTEP*1.5;                    ///LatCoeff;
+}
+//---------------------------------------------------------------------------
+void __fastcall TTrackForm::FormActivate(TObject *Sender)
+{
+	if (MainForm->NoKMDFlag)
+		ClientWidth = 1400;
+	else
+		ClientWidth = 777;
+}
+//---------------------------------------------------------------------------
+void TTrackForm::ShowSpeedInfo(double d_lng, double d_lat)
+{
+	Word Year, Month, Day, H, M, S, MSec;
+	DecodeTime(GetTime(), H, M, S, MSec);
+
+	DecodeTime(GetTime()-MainForm->fStartTime0, H, M, S, MSec);
+	Label_totSpeed->Caption = FloatToStrF(MainForm->fDistanceFromStart*0.001 / (double(GetTime()-MainForm->fStartTime0)*24), ffFixed, 6, 1);
+	Label_Way1->Caption = int(MainForm->fDistanceFromStart);
+}
+//---------------------------------------------------------------------------
+void TTrackForm::ShowTimeInfo(double d_lng, double d_lat)
+{
+	Word Year, Month, Day, H, M, S, MSec;
+	DecodeTime(GetTime(), H, M, S, MSec);
+
+	Label_curTime->Caption = SForm->LeadZero(H,2) +":"+ SForm->LeadZero(M,2);
+	DecodeTime(GetTime()-MainForm->fStartTime0, H, M, S, MSec);
+	Label_runTime->Caption  = SForm->LeadZero(H,2) + ":" + SForm->LeadZero(M,2) + ":" + SForm->LeadZero(S,2);
+}
+//---------------------------------------------------------------------------
+

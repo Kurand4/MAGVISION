@@ -1,0 +1,327 @@
+object TrackForm: TTrackForm
+  Left = 262
+  Top = 190
+  AlphaBlend = True
+  AlphaBlendValue = 188
+  Caption = 'Track'
+  ClientHeight = 640
+  ClientWidth = 825
+  Color = clMoneyGreen
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  Position = poDesigned
+  OnActivate = FormActivate
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 0
+    Width = 825
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+    ExplicitTop = 641
+    ExplicitWidth = 149
+  end
+  object Splitter2: TSplitter
+    Left = 0
+    Top = 556
+    Width = 825
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitTop = 3
+    ExplicitWidth = 693
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 559
+    Width = 825
+    Height = 81
+    Align = alBottom
+    Caption = ' '
+    TabOrder = 0
+    DesignSize = (
+      825
+      81)
+    object CloseButton: TButton
+      Left = 704
+      Top = 6
+      Width = 113
+      Height = 67
+      Anchors = [akRight, akBottom]
+      Caption = 'Close'
+      TabOrder = 0
+      OnClick = CloseButtonClick
+    end
+    object GroupBox5: TGroupBox
+      Left = 9
+      Top = 6
+      Width = 544
+      Height = 65
+      Anchors = [akLeft, akTop, akBottom]
+      Caption = 'Info'
+      TabOrder = 1
+      object Label3: TLabel
+        Left = 218
+        Top = 3
+        Width = 73
+        Height = 13
+        Caption = 'Average speed'
+      end
+      object Label_totSpeed: TLabel
+        Left = 224
+        Top = 22
+        Width = 86
+        Height = 33
+        AutoSize = False
+        Caption = '____'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label_Way1: TLabel
+        Left = 464
+        Top = 22
+        Width = 91
+        Height = 25
+        Caption = '_______'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label9: TLabel
+        Left = 464
+        Top = 3
+        Width = 45
+        Height = 13
+        Caption = 'Distance:'
+      end
+      object Label_curTime: TLabel
+        Left = 3
+        Top = 22
+        Width = 86
+        Height = 33
+        AutoSize = False
+        Caption = '____'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label_runTime: TLabel
+        Left = 95
+        Top = 22
+        Width = 114
+        Height = 33
+        AutoSize = False
+        Caption = '____'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label_curSpeed: TLabel
+        Left = 336
+        Top = 22
+        Width = 86
+        Height = 33
+        AutoSize = False
+        Caption = '____'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Visible = False
+      end
+      object Label2: TLabel
+        Left = 336
+        Top = 3
+        Width = 69
+        Height = 13
+        Caption = 'Current speed'
+        Visible = False
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 588
+      Top = 6
+      Width = 89
+      Height = 51
+      Anchors = [akRight, akBottom]
+      Caption = 'GPS Samples'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      DesignSize = (
+        89
+        51)
+      object L_CoordCount: TLabel
+        Left = 13
+        Top = 32
+        Width = 32
+        Height = 16
+        Anchors = [akBottom]
+        Caption = '____'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGreen
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object L_BadCoordCount: TLabel
+        Left = 51
+        Top = 32
+        Width = 24
+        Height = 16
+        Anchors = [akBottom]
+        Caption = '___'
+        Color = clRed
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 3
+    Width = 825
+    Height = 553
+    Align = alClient
+    Caption = 'Panel2'
+    TabOrder = 1
+    object Chart_Track: TChart
+      Left = 1
+      Top = 1
+      Width = 823
+      Height = 551
+      Border.Width = 3
+      Border.SmallDots = True
+      BorderRound = 3
+      Legend.Visible = False
+      Title.CustomPosition = True
+      Title.Font.Height = -9
+      Title.Left = 183
+      Title.Text.Strings = (
+        'TChart')
+      Title.Top = 13
+      Title.VertMargin = 0
+      BottomAxis.AxisValuesFormat = '#,##0.0000'
+      BottomAxis.Grid.Visible = False
+      BottomAxis.LabelsSeparation = 50
+      BottomAxis.StartPosition = 10.000000000000000000
+      BottomAxis.EndPosition = 90.000000000000000000
+      DepthAxis.Automatic = False
+      DepthAxis.AutomaticMaximum = False
+      DepthAxis.AutomaticMinimum = False
+      DepthAxis.Maximum = 2.809999999999996000
+      DepthAxis.Minimum = 1.809999999999999000
+      DepthTopAxis.Automatic = False
+      DepthTopAxis.AutomaticMaximum = False
+      DepthTopAxis.AutomaticMinimum = False
+      DepthTopAxis.Maximum = 2.809999999999996000
+      DepthTopAxis.Minimum = 1.809999999999999000
+      LeftAxis.AxisValuesFormat = '#,##0.0000'
+      LeftAxis.Grid.Visible = False
+      LeftAxis.LabelsAngle = 90
+      LeftAxis.LabelsSeparation = 50
+      LeftAxis.StartPosition = 10.000000000000000000
+      LeftAxis.EndPosition = 90.000000000000000000
+      RightAxis.Automatic = False
+      RightAxis.AutomaticMaximum = False
+      RightAxis.AutomaticMinimum = False
+      RightAxis.Visible = False
+      TopAxis.Visible = False
+      View3D = False
+      Align = alClient
+      BorderWidth = 3
+      Color = clWindow
+      TabOrder = 0
+      ExplicitLeft = 17
+      ExplicitTop = 6
+      ExplicitWidth = 808
+      ExplicitHeight = 547
+      DefaultCanvas = 'TGDIPlusCanvas'
+      ColorPaletteIndex = 13
+      object Series_Track: TPointSeries
+        HoverElement = [heCurrent]
+        Legend.Visible = False
+        SeriesColor = 4210688
+        ShowInLegend = False
+        ClickableLine = False
+        Pointer.HorizSize = 1
+        Pointer.InflateMargins = True
+        Pointer.Style = psRectangle
+        Pointer.VertSize = 1
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+      object FirstPointSeries: TPointSeries
+        HoverElement = [heCurrent]
+        Legend.Visible = False
+        Marks.Font.Height = -13
+        Marks.Frame.Visible = False
+        Marks.Transparent = True
+        Marks.Visible = True
+        Marks.Style = smsPointIndex
+        SeriesColor = 8388863
+        ShowInLegend = False
+        ClickableLine = False
+        Pointer.InflateMargins = False
+        Pointer.Pen.Color = clRed
+        Pointer.Pen.Width = 2
+        Pointer.Style = psCircle
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+      object MarkerSeries: TPointSeries
+        HoverElement = [heCurrent]
+        Legend.Visible = False
+        Marks.Font.Height = -9
+        Marks.Visible = True
+        Marks.Style = smsPointIndex
+        PercentFormat = '##0.##,%'
+        ShowInLegend = False
+        ClickableLine = False
+        Pointer.Brush.Color = 33023
+        Pointer.HorizSize = 3
+        Pointer.InflateMargins = True
+        Pointer.Style = psDiamond
+        Pointer.VertSize = 3
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+    end
+  end
+end

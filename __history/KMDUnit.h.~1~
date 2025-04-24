@@ -1,0 +1,44 @@
+//---------------------------------------------------------------------------
+
+#ifndef KMDUnitH
+#define KMDUnitH
+
+#define DATABUF   108
+
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+//---------------------------------------------------------------------------
+class TKMD : public TThread
+{
+private:
+	char 	  buf[DATABUF];
+	int     m_lLastError;
+	double	d_lat, d_long;        // текущие широта и долгота
+	double	fSpeed, fKurs; 				// скорость и курс
+	double  d_time;     					// текущие время и дата от KMD
+	int 		EmptyStrCount;
+	AnsiString  sComPort;
+	HANDLE  KMDport;
+	HANDLE  ComFile;
+	TDCB 		lpDCB;
+	TCommTimeouts lpCommTimeouts;
+	String sKMD;
+	Word 		Year, Month, Day, Hour, Min, Sec, MSec;
+	void __fastcall ShowResult();
+	void __fastcall ShowData();
+	bool __fastcall StartKMD();
+	void __fastcall StopKMD();
+	void __fastcall SendAlarm();
+	bool 		DecodeKMD(String, double &, double &, double &);
+	String  GetKMDstring();              // возвращает строку данных от KMD
+	void 		AcceptKMDData();    // устанавливает текущие значения координат и скорости
+protected:
+	void 	 OpenDataDir();
+	void __fastcall Execute();
+	String 	LeadZero(int k, int dig);
+public:
+	String	sCurPath, sDataPath;
+	__fastcall TKMD(bool CreateSuspended);
+};
+//---------------------------------------------------------------------------
+#endif

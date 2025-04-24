@@ -1,0 +1,434 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#include <shellapi.h>
+#include <windows.h>
+#pragma hdrstop
+
+#include "MainUnit.h"
+#include "SUnit.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TSForm *SForm;
+//---------------------------------------------------------------------------
+__fastcall TSForm::TSForm(TComponent* Owner)  	: TForm(Owner)  {   }
+//---------------------------------------------------------------------------
+void __fastcall TSForm::FormCreate(TObject *Sender)
+{
+	ClearAllBox();
+	KMDport = NULL;
+	KMD0port = NULL;
+	GPSport = NULL;
+	COMListBoxDblClick(this);
+	GetInfFile();
+	iOutputType = 0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::CloseButtonClick(TObject *Sender)
+{
+	Hide();
+}
+//---------------------------------------------------------------------------
+void TSForm::ClearAllBox()
+{
+	COMListBox->Clear();
+	KMDMemo->Clear();
+	KMD0Memo->Clear();
+	GPSMemo->Clear();
+	CBox_KMDBth->Clear();
+	CBox_GPSBth->Clear();
+}
+//---------------------------------------------------------------------------
+void TSForm::SetAutoRestart()
+{
+	switch (AUTORESTART) {
+		case 0:       RG_AutoRestart->ItemIndex = 0; break;
+		case 20000:   RG_AutoRestart->ItemIndex = 1; break;
+		case 40000:   RG_AutoRestart->ItemIndex = 2; break;
+		case 60000:   RG_AutoRestart->ItemIndex = 3; break;
+		case 80000:   RG_AutoRestart->ItemIndex = 4; break;
+		case 100000:  RG_AutoRestart->ItemIndex = 5; break;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::RG_AutoRestartClick(TObject *Sender)
+{
+	switch (RG_AutoRestart->ItemIndex) {
+		case 0: AUTORESTART = 0;      break;
+		case 1: AUTORESTART = 20000;  break;
+		case 2: AUTORESTART = 40000;  break;
+		case 3: AUTORESTART = 60000;  break;
+		case 4: AUTORESTART = 80000;  break;
+		case 5: AUTORESTART = 100000; break;
+	}
+}
+//---------------------------------------------------------------------------
+void TSForm::SetMaxPoint()
+{
+	switch (MAXPOINT) {
+		case 1000:  RadioGroup_XAxes->ItemIndex = 0; break;
+		case 2000:  RadioGroup_XAxes->ItemIndex = 1; break;
+		case 3000:  RadioGroup_XAxes->ItemIndex = 2; break;
+		case 4000:  RadioGroup_XAxes->ItemIndex = 3; break;
+		case 5000:  RadioGroup_XAxes->ItemIndex = 4; break;
+		case 6000:  RadioGroup_XAxes->ItemIndex = 5; break;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::RadioGroup_XAxesClick(TObject *Sender)
+{
+	switch (RadioGroup_XAxes->ItemIndex) {
+		case 0: MAXPOINT = 1000; break;
+		case 1: MAXPOINT = 2000; break;
+		case 2: MAXPOINT = 3000; break;
+		case 3: MAXPOINT = 4000; break;
+		case 4: MAXPOINT = 5000; break;
+		case 5: MAXPOINT = 6000; break;
+	}
+}
+//---------------------------------------------------------------------------
+void TSForm::GetInfFile()
+{
+	TIniFile	*	InfFile;
+	AnsiString s;
+	int ind;
+
+	s = GetCurrentDir() + "\\Hardware.inf";
+	if (!FileExists(s.c_str())) return;
+	InfFile 	= new TIniFile(s.c_str());
+	if (ind) COMListBox->ItemIndex  = ind;
+	BthKMDname  	= InfFile->ReadString("KMD", "BthKMDname", "BthModem0");
+	sDevNum 	   = InfFile->ReadString("KMD", "DevNum", "0");       //
+	CBox_KMDBth->Text = BthKMDname;
+	BthGPSname  	= InfFile->ReadString("GPS", "BthGPSname", "BthModem4");
+	CBox_GPSBth->Text = BthGPSname;
+	GPSspeed  = InfFile->ReadInteger("GPS", "GPSspeed", 115200);
+	MAXPOINT 	   = InfFile->ReadInteger("X", "MAXPOINT", 5000);    // кол. точек по оси х на графиках
+	StartWay 	   = InfFile->ReadInteger("X", "StartWay", 0);       //
+	MarkerStep   = InfFile->ReadInteger("X", "MarkerStep", 50);  //
+	AUTORESTART	 = InfFile->ReadInteger("X", "AUTORESTART", 100000);    // кол. точек по оси х на графиках
+	InfFile->Free();
+	CB_StartBox->Text = StartWay;
+	CB_DevNum->Text 	= sDevNum;
+	SetAutoRestart();
+	SetMaxPoint();
+	SetMarkerStep(MarkerStep, RG_MarkerStep);
+}
+//---------------------------------------------------------------------------
+bool __fastcall TSForm::TestKMD(AnsiString s)
+{
+	char 	  buf[512];
+	TDCB		lpDCB;
+	DWORD   BytesRead;
+	String  ss = "";
+	COMMTIMEOUTS  lpCommTimeouts;
+
+	KMDMemo->Lines->Clear();
+	if (KMDport == NULL) {
+		sComPort = "\\\\.\\" + s;
+		KMDport = CreateFile(sComPort.w_str(), GENERIC_READ || GENERIC_WRITE, 0,	NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		m_lLastError = GetLastError();
+		if (!m_lLastError) {
+			if (GetCommState(KMDport, &lpDCB)) {
+				lpDCB.BaudRate = 115200;
+				lpDCB.ByteSize = 8;
+				lpDCB.Parity   = NOPARITY;
+				lpDCB.StopBits = ONESTOPBIT;
+				SetCommState(KMDport, &lpDCB);
+			}
+			m_lLastError = GetLastError();
+			if (m_lLastError) {
+				sComPort="";
+				KMDport = NULL;
+				KMDMemo->Lines->Add("Connect error");
+				return false;
+			}
+		} else {
+			sComPort="";
+			KMDport = NULL;
+			KMDMemo->Lines->Add("Open port error");
+			return false;
+		}
+	}
+	FlushFileBuffers(KMDport);
+	ReadFile(KMDport, buf, sizeof(&buf), &BytesRead, NULL);
+	if (BytesRead) {
+		for (DWORD i = 0; i < BytesRead; i++) {
+			if (buf[i] != '\0') ss += buf[i];
+		}
+		KMDMemo->Lines->Add(ss);
+		CloseHandle(KMDport);
+		KMDport = NULL;
+	} else {
+		sComPort="";
+		KMDport = NULL;
+		KMDMemo->Lines->Add("No data");
+		return false;
+	}
+	return true;
+}
+//---------------------------------------------------------------------------
+bool __fastcall TSForm::TestKMD0(AnsiString s)
+{
+	char 	  buf[512];
+	TDCB		lpDCB;
+	DWORD   BytesRead;
+	String  ss = "";
+	COMMTIMEOUTS  lpCommTimeouts;
+
+	KMD0Memo->Lines->Clear();
+	if (KMDport == NULL) {
+		sComPort = "\\\\.\\" + s;
+		KMD0port = CreateFile(sComPort.w_str(), GENERIC_READ || GENERIC_WRITE, 0,	NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		m_lLastError = GetLastError();
+		if (!m_lLastError) {
+			if (GetCommState(KMDport, &lpDCB)) {
+				lpDCB.BaudRate = 115200;
+				lpDCB.ByteSize = 8;
+				lpDCB.Parity   = NOPARITY;
+				lpDCB.StopBits = ONESTOPBIT;
+				SetCommState(KMDport, &lpDCB);
+			}
+			m_lLastError = GetLastError();
+			if (m_lLastError) {
+				sComPort="";
+				KMDport = NULL;
+				KMDMemo->Lines->Add("Connect error");
+				return false;
+			}
+		} else {
+			sComPort="";
+			KMD0port = NULL;
+			KMDMemo->Lines->Add("Open port error");
+			return false;
+		}
+	}
+	FlushFileBuffers(KMDport);
+	ReadFile(KMD0port, buf, sizeof(&buf), &BytesRead, NULL);
+	if (BytesRead) {
+		for (DWORD i = 0; i < BytesRead; i++) {
+			if (buf[i] != '\0') ss += buf[i];
+		}
+		KMD0Memo->Lines->Add(ss);
+		CloseHandle(KMD0port);
+		KMD0port = NULL;
+	} else {
+		sComPort="";
+		KMD0port = NULL;
+		KMD0Memo->Lines->Add("No data");
+		return false;
+	}
+	return true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::KMDBthButtonClick(TObject *Sender)
+{
+	KMDBthButton->Enabled = false;
+	TestKMD(CBox_KMDBth->Text);
+	KMDBthButton->Enabled = true;
+}
+//---------------------------------------------------------------------------
+void TSForm::SaveInfFile()
+{
+	TIniFile	*	InfFile;
+	AnsiString s;
+
+	s = GetCurrentDir() + "\\Hardware.inf";
+	InfFile 	= new TIniFile(s.c_str());
+	StartWay = CB_StartBox->Text.ToInt();
+	BthKMDname = CBox_KMDBth->Text;
+	if (CBox_KMDBth->Text != "") InfFile->WriteString("KMD", "BthKMDname", BthKMDname);
+	InfFile->WriteString("KMD", "DevNum", sDevNum);         // номер прибора
+	BthGPSname = CBox_GPSBth->Text;
+	if (CBox_GPSBth->Text != "") InfFile->WriteString("GPS", "BthGPSname", BthGPSname);
+	InfFile->WriteInteger("X", "MAXPOINT", MAXPOINT);  // кол. точек по оси х на графиках
+	InfFile->WriteInteger("X", "StartWay", StartWay);
+	InfFile->WriteInteger("X", "MarkerStep", MarkerStep);
+	InfFile->WriteInteger("X", "AUTORESTART", AUTORESTART);  // кол. записей для авторестарта
+	InfFile->Free();
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::COMListBoxDblClick(TObject *Sender)
+{
+	AnsiString s;
+	ClearAllBox();
+	Reg 	= new TRegistry;
+	List 	= new TStringList;
+	Reg->RootKey = HKEY_LOCAL_MACHINE;
+	Reg->OpenKeyReadOnly("HARDWARE\\DEVICEMAP\\SERIALCOMM");
+	Reg->GetValueNames(List);
+	for (int i=0; i < List->Count; i++) {
+		sComPort 	= Reg->ReadString(List->Strings[i]);
+		s 				= List->Strings[i];
+		COMListBox->Items->Add(s + "   " + sComPort);
+		CBox_KMDBth->Items->Add(sComPort);
+		CBox_KMD0Bth->Items->Add(sComPort);
+		CBox_GPSBth->Items->Add(sComPort);
+	}
+	delete Reg;
+	delete List;
+	GetInfFile();
+}
+//---------------------------------------------------------------------------
+void TSForm::SetMarkerStep(int MarkerStep, TRadioGroup *RG)
+{
+	switch (MarkerStep) {
+		case 2:  RG->ItemIndex = 0; break;
+		case 5:  RG->ItemIndex = 1; break;
+		case 10: RG->ItemIndex = 2; break;
+		case 12: RG->ItemIndex = 3; break;
+		case 20: RG->ItemIndex = 4; break;
+		case 50: RG->ItemIndex = 5; break;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::Timer1Timer(TObject *Sender)
+{
+	Application->ProcessMessages();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::RG_MarkerStepClick(TObject *Sender)
+{
+	switch (RG_MarkerStep->ItemIndex) {
+		case 0: MarkerStep = 2; break;
+		case 1: MarkerStep = 5; break;
+		case 2: MarkerStep = 10; break;
+		case 3: MarkerStep = 12; break;
+		case 4: MarkerStep = 20; break;
+		case 5: MarkerStep = 50; break;
+	}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TSForm::CB_StartBoxKeyUp(TObject *Sender, WORD &Key, TShiftState Shift)
+
+{
+	if (Key == 13) Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::RG_PlotTypeClick(TObject *Sender)
+{
+	iOutputType = RG_PlotType->ItemIndex;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::FormHide(TObject *Sender)
+{
+	if (!MainForm->RunFlag) {
+		if (GPSport != NULL) {
+			CloseHandle(GPSport);
+			GPSport = NULL;
+		}
+		if (KMDport != NULL) {
+			CloseHandle(KMDport);
+			KMDport = NULL;
+		}
+	}
+	SaveInfFile();
+	MainForm->GetInfFile();
+	MainForm->ShowWayButtonStatus();
+	MainForm->PausedFlag = false;
+	MainForm->SetOutput(iOutputType);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::AddBluetoothButtonClick(TObject *Sender)
+{
+	String s;
+//	s = L"C:\\windows\\system32\\rundll32.exe","shell32.dll,Control_RunDLL bthprops.cpl,,2";
+	ShellExecute(h, NULL, L"C:\\windows\\system32\\rundll32.exe", NULL, NULL, SW_SHOW);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::ParamBluetoothButtonClick(TObject *Sender)
+{
+	String s;
+//	s = L"C:\\windows\\system32\\rundll32.exe","shell32.dll,Control_RunDLL bthprops.cpl,,2";
+	ShellExecute(h, NULL, L"C:\\windows\\system32\\rundll32.exe", NULL, NULL, SW_SHOW);
+//	ShellExecute(h,"open", s, 0, SW_SHOW);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSForm::FormShow(TObject *Sender)
+{
+	KMDBthButton->Enabled = !MainForm->RunFlag;
+	GPSBthButton->Enabled = !MainForm->RunFlag;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::ButtonSelectFragmentClick(TObject *Sender)
+{
+	bool  bX;
+	float Way0, X;
+	OpenDialog1->Filter = "*.VDT";
+	if (OpenDialog1->Execute()) FragmentName = OpenDialog1->FileName; else return;
+
+	if ((df = fopen(FragmentName.c_str(), "rb")) == NULL) {
+		ShowMessage("File not found");
+		return;
+	}
+	Series1->Clear();
+	Series2->Clear();
+	df = fopen(FragmentName.c_str(), "rb");
+	fread(&DT, sizeof(DT_STRUCT), 1, df);
+	fCount = 0;
+	if (DT.Way == 0) {
+		Way0 = 0;
+		bX   = true;
+	}	else {
+		Way0 = DT.Way;
+		bX   = false;
+	}
+	while (!feof(df)) {
+		try {
+			fread(&DT, sizeof(DT_STRUCT), 1, df);
+//			if (fCount == 0) Way0 = DT.Way;
+			fCount++;
+			(bX) ? X = fCount : X = DT.Way - Way0;
+			Series1->AddXY(X, sqrt(DT.DT_DATA[0]*DT.DT_DATA[0] + DT.DT_DATA[1]*DT.DT_DATA[1] + DT.DT_DATA[2]*DT.DT_DATA[2]));
+			Series2->AddXY(X, sqrt(DT.DT_DATA[3]*DT.DT_DATA[3] + DT.DT_DATA[4]*DT.DT_DATA[4] + DT.DT_DATA[5]*DT.DT_DATA[5]));
+		} catch (...) {
+			ShowMessage("Ошибка чтения файла. Запись " + IntToStr((int)fCount));
+			break;
+		}
+	}
+	fclose(df);
+	CB_FragmSearch->Checked = true;
+}
+//---------------------------------------------------------------------------
+String TSForm::LeadSpace(int k, String ss)
+{
+	AnsiString s="";
+	for (int i = 0; i < k; i++) {
+		s += " ";
+	}
+	s += Trim(ss);
+	return s;
+}
+//---------------------------------------------------------------------------
+String TSForm::LeadZero(int k, int dig)
+{
+	AnsiString s;
+	s=Trim(IntToStr(k));
+	while (s.Length() < dig) s = "0" + s;
+	return s;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::CB_DevNumCloseUp(TObject *Sender)
+{
+	sDevNum = CB_DevNum->Text;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSForm::KMD0BthButtonClick(TObject *Sender)
+{
+	KMD0BthButton->Enabled = false;
+	TestKMD0(CBox_KMD0Bth->Text);
+	KMD0BthButton->Enabled = true;
+}
+//---------------------------------------------------------------------------
+

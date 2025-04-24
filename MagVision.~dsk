@@ -10,13 +10,13 @@ File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\7.0\include\
 
 [Modules]
 Module0=C:\MagVision\MainUnit.cpp
-Module1=default.htm
-Module2=C:\MagVision\SUnit.cpp
-Module3=C:\MagVision\CommentUnit.cpp
-Module4=C:\MagVision\KMDUnit.cpp
-Module5=C:\MagVision\TrackUnit.cpp
-Module6=C:\MagVision\GPSUnit.cpp
-Module7=C:\MagVision\FragmentUnit.cpp
+Module1=C:\MagVision\SUnit.cpp
+Module2=C:\MagVision\CommentUnit.cpp
+Module3=C:\MagVision\KMDUnit.cpp
+Module4=C:\MagVision\TrackUnit.cpp
+Module5=C:\MagVision\GPSUnit.cpp
+Module6=C:\MagVision\FragmentUnit.cpp
+Module7=default.htm
 Count=8
 EditWindowCount=1
 
@@ -24,9 +24,6 @@ EditWindowCount=1
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=1
-
-[default.htm]
-ModuleType=TURLModule
 
 [C:\MagVision\SUnit.cpp]
 ModuleType=TSourceModule
@@ -58,6 +55,9 @@ ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
+[default.htm]
+ModuleType=TURLModule
+
 [EditWindow0]
 ViewCount=8
 CurrentEditView=C:\MagVision\MainUnit.cpp
@@ -74,14 +74,14 @@ Create=1
 Visible=1
 Docked=0
 State=0
-Left=1661
-Top=833
-Width=8339
-Height=8984
+Left=1688
+Top=1172
+Width=6521
+Height=8646
 MaxLeft=-5
 MaxTop=-9
-ClientWidth=8255
-ClientHeight=8646
+ClientWidth=6438
+ClientHeight=8307
 DockedToMainForm=0
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
@@ -512,8 +512,8 @@ SplitPos=73
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=CustomHint,
-ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=1,BevelEdges=0,GlassFrame=0,HorzScrollBar=0,Margins=0,Font.Style=0
+SelectedItem=Action,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0
 
 [ModelViewTool]
 PercentageSizes=1
@@ -567,13 +567,13 @@ Visible=1
 Docked=0
 State=0
 Left=0
-Top=781
+Top=1172
 Width=1688
-Height=3854
+Height=3464
 MaxLeft=-5
 MaxTop=-9
 ClientWidth=1604
-ClientHeight=3516
+ClientHeight=3125
 TBDockHeight=3464
 LRDockWidth=1672
 Dockable=1
@@ -629,7 +629,7 @@ TabDockClients=RefactoringForm,FindReferencsForm
 DockSiteType=1
 PercentageSizes=1
 Create=1
-Visible=0
+Visible=1
 Docked=0
 State=0
 Left=8214

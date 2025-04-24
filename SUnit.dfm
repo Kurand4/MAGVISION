@@ -87,7 +87,7 @@ object SForm: TSForm
     Height = 587
     Align = alClient
     Caption = ' '
-    Color = clMoneyGreen
+    Color = clCream
     ParentBackground = False
     TabOrder = 1
     object Splitter2: TSplitter

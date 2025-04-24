@@ -1,0 +1,261 @@
+//---------------------------------------------------------------------------
+
+#ifndef MainUnitH
+#define MainUnitH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <ExtCtrls.hpp>
+#include "Chart.hpp"
+#include "TeEngine.hpp"
+#include "TeeProcs.hpp"
+#include <ComCtrls.hpp>
+#include <StdIO.h>
+#include "GPSThreadUnit.h"
+#include <ScktComp.hpp>
+#include "DBChart.hpp"
+#include "Series.hpp"
+#include "BubbleCh.hpp"
+#include <Buttons.hpp>
+#include "KMDUnit.h"
+#include "GPSUnit.h"
+
+#define PI 				3.1415926535
+#define ERRTHRESHOLD 1000
+#define BLOCKSIZE 300
+#define DATABUF   108
+//---------------------------------------------------------------------------
+class TMainForm : public TForm
+{
+__published:	// IDE-managed Components
+	TStatusBar *StatusBar1;
+	TPanel *Panel1;
+	TSplitter *Splitter1;
+	TPanel *Panel2;
+	TSplitter *Splitter2;
+	TPanel *Panel3;
+	TSplitter *Splitter3;
+	TPanel *Panel4;
+	TSplitter *Splitter4;
+	TPanel *Panel5;
+	TCheckBox *CheckBox_UseGPS;
+	TButton *GPSButton;
+	TGroupBox *GroupBox4;
+	TLabel *L_StartLat;
+	TLabel *L_StartLng;
+	TLabel *LabelGPS;
+	TLabel *GPSLabel;
+	TLabel *L_SatNum;
+	TLabel *Label7;
+	TGroupBox *GroupBox5;
+	TLabel *Label3;
+	TGroupBox *GroupBox2;
+	TLabel *StaticText_PlotN;
+	TLabel *Label6;
+	TLabel *Label1;
+	TLabel *StaticText_Plot1;
+	TLabel *Label2;
+	TLabel *StaticText_Plot2;
+	TDBChart *VizorPlot1;
+	TFastLineSeries *Series1;
+	TFastLineSeries *Series2;
+	TFastLineSeries *Series3;
+	TPointSeries *Series7;
+	TFastLineSeries *FastLineSeries2;
+	TTimer *Timer1;
+	TTimer *Timer2;
+	TButton *CloseButton;
+	TButton *SetButton;
+	TButton *ShowTrackButton;
+	TButton *RunButton;
+	TButton *CommentButton;
+	TBitBtn *TopArrowButton;
+	TBitBtn *BotArrowButton;
+	TButton *IzolMarkButton;
+	TButton *KIPMarkButton;
+	TButton *CrossMarkButton;
+	TButton *RoadMarkButton;
+	TButton *TurnMarkButton;
+	TComboBox *CB_DepthBox;
+	TLabel *Label5;
+	TFastLineSeries *FastLineSeries1;
+	TPointSeries *PointSeries1;
+	TEdit *Edit_Way0;
+	TLabel *Label9;
+	TLabel *Label_Way1;
+	TGroupBox *GroupBox8;
+	TButton *ButtonWay1;
+	TButton *ButtonWay2;
+	TButton *ButtonWay3;
+	TCheckBox *CheckBox_NoKMD;
+	TLabel *WaterAlarmLabel;
+	TLabel *InfoCounterLabel;
+	TCheckBox *CBox_BGrnd;
+	TCheckBox *CBox_TestFile;
+	TLabel *Label4;
+	TLabel *StaticText_BGrnd;
+	void __fastcall CloseButtonClick(TObject *Sender);
+	void __fastcall RunButtonClick(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall FormActivate(TObject *Sender);
+	void __fastcall CheckBox_UseGPSClick(TObject *Sender);
+	void __fastcall Timer1Timer(TObject *Sender);
+	void __fastcall CommentButtonClick(TObject *Sender);
+	void __fastcall VizorPlot1DblClick(TObject *Sender);
+	void __fastcall GPSButtonClick(TObject *Sender);
+	void __fastcall FormShortCut(TWMKey &Msg, bool &Handled);
+	void __fastcall SetButtonClick(TObject *Sender);
+	void __fastcall ButtonWay1Click(TObject *Sender);
+	void __fastcall ButtonWay2Click(TObject *Sender);
+	void __fastcall ButtonWay3Click(TObject *Sender);
+	void __fastcall Timer2Timer(TObject *Sender);
+	void __fastcall IzolMarkButtonClick(TObject *Sender);
+	void __fastcall KIPMarkButtonClick(TObject *Sender);
+	void __fastcall CrossMarkButtonClick(TObject *Sender);
+	void __fastcall RoadMarkButtonClick(TObject *Sender);
+	void __fastcall TurnMarkButtonClick(TObject *Sender);
+	void __fastcall TopArrowButtonClick(TObject *Sender);
+	void __fastcall BotArrowButtonClick(TObject *Sender);
+	void __fastcall ShowTrackButtonClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall CB_DepthBoxKeyUp(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall CB_DepthBoxCloseUp(TObject *Sender);
+	void __fastcall CheckBox_NoKMDClick(TObject *Sender);
+	void __fastcall BegOpenTubeButtonClick(TObject *Sender);
+	void __fastcall EndOpenTubeButtonClick(TObject *Sender);
+	void __fastcall CBox_BGrndClick(TObject *Sender);
+
+private:	// User declarations
+	unsigned char	key[3];
+	unsigned char	buf[DATABUF];
+	String	    BthKMDname, BthGPSname;
+	struct DT_STRUCT {
+		unsigned short	Metka;
+		TDateTime   DT_TIME;
+		float   	  DT_DATA[6];      //  значения измеряемых компонент
+		float   	  AV_DATA[6];      //  среднее по компонентам на прямолинейных участках
+		float       Way;
+		float       Spd;
+		float       Depth;           //  глубина залегания трубы
+		double      Lat;
+		double      Lng;
+		bool				StdCommentType[5];      // standard comments: 0 - Izol, 1 - KIP, 2 - cross, 3 - road, 4 - turn
+	} DT;
+	DT_STRUCT		BDT[BLOCKSIZE];           // буфер данных для записи на диск
+	double	x1,y1,z1,x2,y2,z2;            // current values
+	float 	Data_Array[9];          // измеренные данные для сохранения
+	float		pr[9];                  // prevous values
+	double  CAV[6];      					  // тeкущее среднее по компонентам на прямолинейных участках
+
+	FILE  * df; 		// *.DAT file
+	__int16 TubeDepth;
+	__int64 iCount;               // счетчик измерений общий  and for the plot
+	__int64 ikCount;              // счетчик измерений для прямолин участка
+//	int 		M_Count;									    // marker conter
+	int 		C_Count;									    // comment counter
+	int 		WaterAlarmCount;
+	bool 		StopFlag, KeyPressedFlag;
+	bool 		MetkaFlag, TestModeFlag;
+	bool 		CommentFlag;      			 	    // флаг комментария
+	bool		AbortFlag;
+	bool 		CtrlFlag;
+	bool		MetkaDoneFlag;
+	bool		UseBGrndFlag;
+	int			MetkaDoneCount;
+	int 		MarkerStep, StepCount, StartWay;
+	int			NoDataCount;
+	double	fTime, fPrTime, fPassTime, fTimeInterval; 	//
+	double	aExtremum[2][2]; 				        // экстремальные значения, полученные в течение сеанса
+	double  V1,  V2, VB;                        // current values of full vectors
+	double  VA1, VA2;                       // current values of anomaly vectors
+	int 		MAXPOINT, MARGINPOINT;          // кол. точек по оси х на графиках
+	int			SatNum;                         // number of satelits
+	double	dSumLat, dSumLng;
+	double	MaxLat, MinLat, MaxLng, MinLng;
+	double	LatCoeff;                       // cos(d_lat*PI/180.0)
+	double  BeforePauseLat, BeforePauseLng;
+	int 		EmptyStrCount;
+  bool		StartMoveFlag;
+	double	StartX,  StartY;            	  // начало движения мышки       izm
+	double	EndX, EndY;                     // end of движения мышки       izm
+
+	bool 		DoKMDConnect();
+	void 		ClearPlot();
+	void 		ProccessRecord();
+	void  __fastcall DoFastComment(int);
+	void  __fastcall DoButtonWay(AnsiString);
+	void  __fastcall SaveCommentFile(AnsiString s);
+	void 		AddRecordToDTfile();
+	void 		OpenDTfile();
+	void 		CloseDTfile();
+	void 		SaveInfFile();
+	void 		RenewTotalDistance();
+	void 	__fastcall ShowDataToPlot(Longint);
+	void 	__fastcall SetHorizontalAxis();
+	void 	__fastcall SetHorizontalAxis(Longint);
+	void 	__fastcall SetIniVerticalAxis(int);
+	double __fastcall GetMax(double, double);
+	double __fastcall GetMin(double, double);
+	double __fastcall Dist(double lt1, double lt2, double lg1, double lg2);   // distance between two points
+	void 	 ShowStatusBarInfo();
+
+	void 		ResetBeforeStart();
+	bool    DecodeGPS(AnsiString sG, double & s_lat, double & s_lng);
+	void __fastcall ShowGPSData();
+	AnsiString  sComPort;
+	int		  m_lLastError;
+	TDCB 		lpDCB;
+	TCommTimeouts lpCommTimeouts;
+	bool		FastCommentFlag;           // one of WAY or FASTComment buttons  was  pressed
+	bool		FragmSearchFlag;
+	AnsiString sWay;
+	int 		KMDtype, GPStype; // type of connection from inf-file    1 - USB 2 - Bth
+	int			Prhour;
+	__int64     AUTORESTART;
+
+public:		// User declarations
+	AnsiString OutputFileName;       	// имя текущего выходного файла
+	TGPS * GPSThread;
+	TKMD * KMDThread;
+	double  fTotalDistance0, fTotalDistance;   //  пройденный путь
+	double  fDistanceFromStart;   					//  перемещение от точки старта
+	TDateTime	fStartTime0, fCurrentTime; 	  //
+	AnsiString sGPS;
+	char 	  G[255];
+	char 	  D[DATABUF];
+	__int16	CoordCount, BadCoordCount;
+	int			KMDspeed,   GPSspeed;
+	void 		GetInfFile();
+	bool		UseGPSFlag, NoKMDFlag, InternalGPSflag;
+	bool		NoGPSDataFlag;
+	bool		RunGPSFlag;
+	bool		ReadyFlag;                // ready to get new buf
+	bool		GPSReadyFlag;                // ready to get new buf
+	bool		OpenTubeFlag;
+	AnsiString KMDComPort,  GPSComPort,  GPSComName;
+	AnsiString DataBaseDir, WorkDir;
+	AnsiString __fastcall GetCOMnum(AnsiString DeviceName);
+	int		 	hour, min, sek, dsek;
+	double  d_time;     					// текущие время и дата от GPS
+	double	d_lat, d_lng;        // текущие широта и долгота
+	double	fStartLat, fStartLong;
+	double	fSpeed, fKurs; 	//
+	double	fPrLat, fPrLong;
+	__fastcall TMainForm(TComponent* Owner);
+	void 		ShowButtonStatus();
+	void 		ShowWayButtonStatus();
+	void 		ShowHour(bool bShow);
+	void 		ShowGPS(DWORD  BytesRead);
+	void 		ShowKMD(DWORD  BytesRead);
+	void 		GPSResult(bool bShow);
+	void 		KMDResult(bool bShow);
+	void 		NoDataAlarm();
+	bool 		RunFlag, PausedFlag;      				// прием данных и пауза в приеме данных
+	void __fastcall SetOutput(int);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TMainForm *MainForm;
+//---------------------------------------------------------------------------
+#endif

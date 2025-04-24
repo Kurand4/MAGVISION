@@ -1,0 +1,53 @@
+//---------------------------------------------------------------------------
+
+#ifndef FragmentUnitH
+#define FragmentUnitH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "Chart.hpp"
+#include "TeEngine.hpp"
+#include "TeeProcs.hpp"
+#include <ExtCtrls.hpp>
+#include "Series.hpp"
+#include <stdio.h>
+
+#define ACTCHAN 	25     		// колич. реально измеряемых каналов + градиенты по компонентам
+//---------------------------------------------------------------------------
+class TFragmentForm : public TForm
+{
+__published:	// IDE-managed Components
+	TPanel *Panel1;
+	TChart *Chart1;
+	TFastLineSeries *Series1;
+	TFastLineSeries *Series2;
+	void __fastcall FormActivate(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall Chart1DblClick(TObject *Sender);
+private:	// User declarations
+	AnsiString FragmentName;
+	FILE  * df;
+	struct DT_STRUCT {
+		unsigned short	Metka;
+		TDateTime   DT_TIME;
+		float   	  DT_DATA[6];      //  значения измеряемых компонент
+		float   	  AV_DATA[6];      //  среднее по компонентам на прямолинейных участках
+		float       Way;
+		float       Spd;
+		float       Depth;           //  глубина залегания трубы
+		double      Lat;
+		double      Lng;
+		bool				StdCommentType[5];    // standard comments: 0 - Izol, 1 - KIP, 2 - cross, 3 - road, 4 - turn
+	} DT;
+	int			fCount;   // number of fragment points
+public:		// User declarations
+	void __fastcall TFragmentForm::Init(AnsiString FName);
+	int		ChanNum;
+	__fastcall TFragmentForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFragmentForm *FragmentForm;
+//---------------------------------------------------------------------------
+#endif

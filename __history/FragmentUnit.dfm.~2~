@@ -1,0 +1,90 @@
+object FragmentForm: TFragmentForm
+  Left = 0
+  Top = 0
+  AutoSize = True
+  BorderWidth = 1
+  Caption = #1048#1089#1082#1086#1084#1099#1081' '#1092#1088#1072#1075#1084#1077#1085#1090
+  ClientHeight = 278
+  ClientWidth = 258
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnMouseWheelDown = FormMouseWheelDown
+  OnMouseWheelUp = FormMouseWheelUp
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 258
+    Height = 278
+    Align = alClient
+    Caption = 'Panel1'
+    TabOrder = 0
+    DesignSize = (
+      258
+      278)
+    object Chart1: TChart
+      Left = 8
+      Top = 8
+      Width = 239
+      Height = 231
+      Border.Width = 2
+      BorderRound = 1
+      LeftWall.Transparency = 50
+      MarginBottom = 0
+      MarginLeft = 0
+      MarginRight = 0
+      MarginTop = 0
+      Title.Text.Strings = (
+        '')
+      BottomAxis.StartPosition = 2.000000000000000000
+      BottomAxis.EndPosition = 98.000000000000000000
+      View3D = False
+      BorderWidth = 1
+      Color = clCream
+      TabOrder = 0
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      OnDblClick = Chart1DblClick
+      PrintMargins = (
+        25
+        15
+        25
+        15)
+      object Series1: TFastLineSeries
+        Marks.Arrow.Visible = True
+        Marks.Callout.Brush.Color = clBlack
+        Marks.Callout.Arrow.Visible = True
+        Marks.Visible = False
+        ShowInLegend = False
+        LinePen.Color = clRed
+        LinePen.Width = 2
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+      object Series2: TFastLineSeries
+        Marks.Arrow.Visible = True
+        Marks.Callout.Brush.Color = clBlack
+        Marks.Callout.Arrow.Visible = True
+        Marks.Visible = False
+        SeriesColor = clBlue
+        ShowInLegend = False
+        LinePen.Color = clBlue
+        LinePen.Width = 2
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+    end
+  end
+end

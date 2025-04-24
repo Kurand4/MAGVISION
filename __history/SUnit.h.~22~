@@ -1,0 +1,144 @@
+//---------------------------------------------------------------------------
+
+#ifndef SUnitH
+#define SUnitH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <ExtCtrls.hpp>
+#include "Chart.hpp"
+#include "TeEngine.hpp"
+#include "TeeProcs.hpp"
+#include <Dialogs.hpp>
+#include "Series.hpp"
+#include <CmAdmCtl.hpp>
+#include <OleServer.hpp>
+#include "ShellApi.h"
+//---------------------------------------------------------------------------
+class TSForm : public TForm
+{
+__published:	// IDE-managed Components
+	TTimer *Timer1;
+	TPanel *Panel1;
+	TSplitter *Splitter1;
+	TPanel *Panel2;
+	TPanel *Panel3;
+	TSplitter *Splitter2;
+	TPanel *Panel4;
+	TSplitter *Splitter3;
+	TPanel *Panel5;
+	TListBox *COMListBox;
+	TLabel *Label1;
+	TRadioGroup *RadioGroup_XAxes;
+	TRadioGroup *RG_MarkerStep;
+	TButton *CloseButton;
+	TComboBox *CB_StartBox;
+	TLabel *Label2;
+	TGroupBox *GroupBox1;
+	TMemo *KMDMemoL;
+	TComboBox *CBox_KMDBthL;
+	TButton *KMDBthButtonL;
+	TLabel *Label3;
+	TRadioGroup *RG_PlotType;
+	TButton *ParamBluetoothButton;
+	TButton *AddBluetoothButton;
+	TButton *Button1;
+	TSplitter *Splitter4;
+	TPanel *Panel6;
+	TGroupBox *GroupBox7;
+	TChart *Chart1;
+	TFastLineSeries *Series1;
+	TFastLineSeries *Series2;
+	TButton *ButtonSelectFragment;
+	TCheckBox *CB_FragmSearch;
+	TOpenDialog *OpenDialog1;
+	TRadioGroup *RG_AutoRestart;
+	TPanel *Panel7;
+	TSplitter *Splitter5;
+	TGroupBox *GroupBox2;
+	TLabel *Label4;
+	TMemo *GPSMemo;
+	TComboBox *CBox_GPSBth;
+	TButton *GPSBthButton;
+	TGroupBox *GroupBox3;
+	TLabel *Label5;
+	TMemo *KMDMemoR;
+	TComboBox *CBox_KMDBthR;
+	TButton *KMDBthButtonR;
+	TCheckBox *CheckBox_Left;
+	TCheckBox *CheckBox_Right;
+	void __fastcall CloseButtonClick(TObject *Sender);
+	void __fastcall RadioGroup_XAxesClick(TObject *Sender);
+	void __fastcall KMDBthButtonLClick(TObject *Sender);
+	void __fastcall CBox_KMDBthLCloseUp(TObject *Sender);
+	void __fastcall COMListBoxDblClick(TObject *Sender);
+	void __fastcall GPSBthButtonClick(TObject *Sender);
+	void __fastcall Timer1Timer(TObject *Sender);
+	void __fastcall RG_MarkerStepClick(TObject *Sender);
+	void __fastcall CB_StartBoxKeyUp(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall RG_PlotTypeClick(TObject *Sender);
+	void __fastcall FormHide(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall ParamBluetoothButtonClick(TObject *Sender);
+	void __fastcall AddBluetoothButtonClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
+	void __fastcall ButtonSelectFragmentClick(TObject *Sender);
+	void __fastcall CheckBox_LeftClick(TObject *Sender);
+	void __fastcall CheckBox_RightClick(TObject *Sender);
+	void __fastcall KMDBthButtonRClick(TObject *Sender);
+	void __fastcall CBox_KMDBthRCloseUp(TObject *Sender);
+
+private:	// User declarations
+  HWND    h;
+	FILE  * df;
+	AnsiString	BthKMDnameL, BthKMDnameR, BthGPSname, InfoStr;
+	AnsiString  sComPort;
+	struct DT_STRUCT {
+		unsigned short	Metka;              //
+		TTime 	    DT_TIME;
+		float     	DT_DATA[6];      //
+		float      	AV_DATA[6];      //
+		float       Way;
+		float       Spd;
+		float       Depth;
+		double      Lat;
+		double      Lng;
+		bool				StdCommentType[5];    // standard comments: 0 - Izol, 1 - KIP, 2 - cross, 3 - road, 4 - turn
+	} DT;
+	TDCB		lpDCB;
+	char 	  buf[256];
+	DWORD   BytesRead;
+	int			GPSspeed;
+	bool	LeftActiveFlag, RightActiveFlag;
+
+	TRegistry		* Reg;
+	TStringList * List;
+	int		  m_lLastError;
+	int 		MAXPOINT;    // кол. точек по оси х на графиках
+	int 		MarkerStep, StartWay;
+	__int64     AUTORESTART;
+	void 		ClearAllBox();
+	void 		SetMaxPoint();
+	void 		GetInfFile();
+	bool 		__fastcall TestKMDLeft(AnsiString s);
+	bool 		__fastcall TestKMDRight(AnsiString s);
+	void 		__fastcall TestGPS(AnsiString s);
+	void 		SetMarkerStep(int MarkerStep, TRadioGroup *RG);
+	void 		SetAutoRestart();
+public:		// User declarations
+	AnsiString  FragmentName;
+	HANDLE  GPSport, KMDportL, KMDportR;
+	void 		SaveInfFile();
+	bool    KMDBthflag, GPSBthflag;
+	int			fCount;   // number of fragment points
+	double	FrLat, FrLng;
+	int 		iOutputType;           // 0 - V   1 - VA  2 - both
+	__fastcall TSForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TSForm *SForm;
+//---------------------------------------------------------------------------
+#endif

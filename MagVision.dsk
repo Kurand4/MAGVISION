@@ -11,12 +11,12 @@ File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\7.0\include\
 [Modules]
 Module0=C:\MagVision\MainUnit.cpp
 Module1=C:\MagVision\SUnit.cpp
-Module2=C:\MagVision\CommentUnit.cpp
-Module3=C:\MagVision\KMDUnit.cpp
-Module4=C:\MagVision\TrackUnit.cpp
-Module5=C:\MagVision\GPSUnit.cpp
-Module6=C:\MagVision\FragmentUnit.cpp
-Module7=default.htm
+Module2=default.htm
+Module3=C:\MagVision\CommentUnit.cpp
+Module4=C:\MagVision\KMDUnit.cpp
+Module5=C:\MagVision\TrackUnit.cpp
+Module6=C:\MagVision\GPSUnit.cpp
+Module7=C:\MagVision\FragmentUnit.cpp
 Count=8
 EditWindowCount=1
 
@@ -28,7 +28,10 @@ FormOnTop=1
 [C:\MagVision\SUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
+
+[default.htm]
+ModuleType=TURLModule
 
 [C:\MagVision\CommentUnit.cpp]
 ModuleType=TSourceModule
@@ -55,9 +58,6 @@ ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
-[default.htm]
-ModuleType=TURLModule
-
 [EditWindow0]
 ViewCount=8
 CurrentEditView=C:\MagVision\MainUnit.cpp
@@ -76,11 +76,11 @@ Docked=0
 State=0
 Left=1688
 Top=1172
-Width=6521
+Width=7948
 Height=8646
 MaxLeft=-5
 MaxTop=-9
-ClientWidth=6438
+ClientWidth=7865
 ClientHeight=8307
 DockedToMainForm=0
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
@@ -512,8 +512,8 @@ SplitPos=73
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Action,
-ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0
+SelectedItem=Color,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0,BevelEdges=0
 
 [ModelViewTool]
 PercentageSizes=1
@@ -629,7 +629,7 @@ TabDockClients=RefactoringForm,FindReferencsForm
 DockSiteType=1
 PercentageSizes=1
 Create=1
-Visible=1
+Visible=0
 Docked=0
 State=0
 Left=8214

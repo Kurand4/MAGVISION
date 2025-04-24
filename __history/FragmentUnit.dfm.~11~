@@ -1,0 +1,30 @@
+object FragmentForm: TFragmentForm
+  Left = 0
+  Top = 0
+  AutoSize = True
+  BorderWidth = 1
+  Caption = #1048#1089#1082#1086#1084#1099#1081' '#1092#1088#1072#1075#1084#1077#1085#1090
+  ClientHeight = 278
+  ClientWidth = 258
+  Color = clCream
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 258
+    Height = 278
+    Align = alClient
+    Caption = 'Panel1'
+    TabOrder = 0
+  end
+end

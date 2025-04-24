@@ -1,0 +1,119 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "MainUnit.h"
+#include "GPSUnit.h"
+#pragma package(smart_init)
+//---------------------------------------------------------------------------
+//   Important: Methods and properties of objects in VCL can only be
+//   used in a method called using Synchronize, for example:
+//
+//      Synchronize(&UpdateCaption);
+//
+//   where UpdateCaption could look like:
+//
+//      void __fastcall TGPS::UpdateCaption()
+//      {
+//        Form1->Caption = "Updated in a thread";
+//      }
+//---------------------------------------------------------------------------
+
+__fastcall TGPS::TGPS(bool CreateSuspended) : TThread(CreateSuspended)
+{
+	GPSport = NULL;
+}
+//---------------------------------------------------------------------------
+void __fastcall TGPS::Execute()
+{
+	if (StartGPS()) {
+		Synchronize(ShowResult);
+		AcceptGPSData();
+		StopGPS();
+  } else {
+		MainForm->ShowHour(false);
+		ShowMessage("Ошибка подключения GPS " + m_lLastError);
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TGPS::ShowResult()
+{
+	MainForm->GPSResult(true);
+}
+//---------------------------------------------------------------------------
+void __fastcall TGPS::ShowData()
+{
+	MainForm->ShowGPS(sGGA);
+}
+//---------------------------------------------------------------------------
+bool __fastcall TGPS::StartGPS()
+{
+	sComPort = "\\\\.\\" + MainForm->GPSComPort;
+	GPSport = CreateFile(sComPort.c_str(), GENERIC_READ | GENERIC_WRITE, 0,	NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	m_lLastError = GetLastError();
+	if(!GetCommState(GPSport, &lpDCB))	{
+		m_lLastError = ::GetLastError();
+		GPSport = 0;
+		sComPort="";
+		return false;
+	}
+	lpDCB.BaudRate = 9600;
+	lpDCB.ByteSize = 8;
+	lpDCB.Parity   = NOPARITY;
+	lpDCB.StopBits = ONESTOPBIT;
+	if (!SetCommState(GPSport, &lpDCB)) {
+		sComPort="";
+		return false;
+	}
+	return true;
+}
+//---------------------------------------------------------------------------
+void TGPS::AcceptGPSData()   	// устанавливает текущие значения координат и скорости
+{
+	FILE 		*f;
+	DWORD   BytesRead;
+	String 	s = "";
+	unsigned short 	n = 0;
+	DWORD 	ln;
+	DWORD 	k;
+	char 	buf[256];
+
+	AnsiString 	s1 = "", s2 = "";
+	String	dt, t, lat, lng;
+	f  = fopen("GPS.RAW", "wb");
+
+	while (!Terminated) {
+		sGGA = "" ;
+		ReadFile(GPSport, buf, sizeof(&buf), &BytesRead, NULL);
+		if (BytesRead) {
+			fwrite(buf, BytesRead, 1, f);
+			s  = (String)buf;
+			n  = s.Pos("$GPGGA");
+			if (n > 0) {
+				s = s.SubString(n, 77);
+				k  = 1;
+				ln = s.Length();
+				n  = s.Pos("@");
+				if ((ln > 31) && (n == 0)) {
+					do {
+						sGGA += s[k];
+						k++;
+						if (k == ln) break;
+					} while ((s[k] != '\r') || (s[k+1] != '\n'));
+				}
+			}
+ 		}
+		Synchronize(ShowData);     // send sGGA to MainForm
+	}
+	fclose(f);
+}
+//---------------------------------------------------------------------------
+void __fastcall TGPS::StopGPS()
+{
+	if (GPSport != NULL) {
+		CloseHandle(GPSport);
+		GPSport = NULL;
+	}
+}
+//---------------------------------------------------------------------------
